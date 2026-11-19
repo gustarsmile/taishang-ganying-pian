@@ -44,8 +44,8 @@ describe('pageViewUrl', () => {
     const base = `${window.location.origin}${window.location.pathname}`;
     expect(pageViewUrl(window.location, 'ch/3')).toBe(`${base}ch/3`);
     expect(pageViewUrl(window.location, '')).toBe(base);
-    expect(pageViewUrl({ origin: 'https://gustarsmile.github.io', pathname: '/taishang-ganying-pian/' }, 'land'))
-      .toBe('https://gustarsmile.github.io/taishang-ganying-pian/land');
+    expect(pageViewUrl({ origin: 'https://edu.omilkyway.org', pathname: '/taishang-ganying-pian/' }, 'land'))
+      .toBe('https://edu.omilkyway.org/taishang-ganying-pian/land');
   });
   it('pathname 不是斜線結尾（例如 /index.html）也接得對', () => {
     expect(pageViewUrl({ origin: 'https://x.org', pathname: '/book/index.html' }, 'ch/1')).toBe('https://x.org/book/ch/1');

@@ -1,8 +1,8 @@
 export const BOOK_TITLE = '太上感應篇';
 
-// 部署定址：GitHub Pages（帳號 gustarsmile）。改這個值之後，index.html 的 og:url／og:image 也要一起改
+// 部署定址：GitHub Pages（帳號 gustarsmile），自訂網域 edu.omilkyway.org 設定在 gustarsmile.github.io 那個 repo。改這個值之後，index.html 的 og:url／og:image 也要一起改
 // （tests/html.test.js 會守門）。
-export const BOOK_URL = 'https://gustarsmile.github.io/taishang-ganying-pian/';
+export const BOOK_URL = 'https://edu.omilkyway.org/taishang-ganying-pian/';
 
 // Google Analytics 4 的評估 ID（帳戶 OMILKYWAY.ORG、資源 taishang-ganying-pian，2026-11-19 建立）。
 // 這裡和 index.html 的 <head> 要一起改（tests/html.test.js 會檢查）；留空字串就代表沒裝，

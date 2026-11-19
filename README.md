@@ -2,7 +2,7 @@
 
 《太上感應篇》（道教勸善書，託名太上老君，全文 1,277 字）的網頁電子書：原文、白話、註解、朗讀，加上幾種取自原文的互動。蔬米 OMILKYWAY「經典互動」系列之一，和《十善業道經》電子書、弟子規小遊戲、三款遊記遊戲同一個家族；程式是從《十善業道經》那一本（`ten-virtues-sutra`）改寫來的。
 
-正式網址：<https://gustarsmile.github.io/taishang-ganying-pian/>
+正式網址：<https://edu.omilkyway.org/taishang-ganying-pian/>
 
 ## 這本書有什麼
 
@@ -36,7 +36,7 @@ npx vitest run     # 全部測試
 
 ```html
 <iframe
-  src="https://gustarsmile.github.io/taishang-ganying-pian/"
+  src="https://edu.omilkyway.org/taishang-ganying-pian/"
   title="太上感應篇互動電子書"
   style="width: 100%; max-width: 560px; height: 820px; border: 0; border-radius: 8px; display: block; margin: 0 auto;"
   loading="lazy">

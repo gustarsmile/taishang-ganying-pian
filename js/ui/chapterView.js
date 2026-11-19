@@ -2,6 +2,7 @@ import { el, button, append, artFigure, cnNumber } from './dom.js';
 import { rawWithTerms } from './gloss.js';
 import { lampList, partChapters, chapterTitle, chapterRaw, splitSentences } from '../book.js';
 import { PARTS } from '../config.js';
+import { annotate } from '../zhuyin.js';
 
 // 「全篇十章」一覽：怎麼分組、每一章一句話
 const OVERVIEW_GROUPS = [
@@ -31,10 +32,11 @@ function isReading(e) {
   return String(globalThis.getSelection?.() ?? '') !== '';
 }
 
-// 一段原文＋註解框＋白話
-function passageBlock(block, glossary, plainNodes) {
+// 一段原文＋註解框＋白話。raws 收集這一頁每一筆原文（開關注音時要一筆一筆重畫）
+function passageBlock(block, glossary, plainNodes, raws) {
   const box = el('div', 'passage');
-  const { node, note } = rawWithTerms(block.raw, block.terms, glossary);
+  const { node, note, setReadings } = rawWithTerms(block.raw, block.terms, glossary);
+  raws.push({ raw: block.raw, setReadings });
   const plain = el('p', 'plain', block.plain);
   plainNodes.push(plain);
   append(box, append(el('p', 'raw-line'), node), note, plain);
@@ -42,7 +44,7 @@ function passageBlock(block, glossary, plainNodes) {
 }
 
 // 〈積善章〉〈諸惡章〉的清單：一列一盞燈，點了才亮、才顯示白話
-function lampsBlock(block, ch, ctx) {
+function lampsBlock(block, ch, ctx, raws) {
   const { store, book, go } = ctx;
   const total = block.items.length;
   const good = block.tone === 'good';
@@ -86,7 +88,8 @@ function lampsBlock(block, ch, ctx) {
     const lamp = el('button', 'lamp');
     lamp.type = 'button';
     lamp.setAttribute('aria-label', `第 ${i + 1} 盞燈`);
-    const { node, note } = rawWithTerms(item.raw, item.terms, book.glossary);
+    const { node, note, setReadings } = rawWithTerms(item.raw, item.terms, book.glossary);
+    raws.push({ raw: item.raw, setReadings });
     const plain = el('div', 'plain');
     plain.appendChild(el('p', null, item.plain));
     if (item.note) plain.appendChild(el('p', 'collation', item.note));
@@ -206,6 +209,38 @@ function speakButton(ch, ctx) {
   return b;
 }
 
+// 「注音：開／關」：只有原文加注音，白話、註解都不加。狀態記在偏好裡，換頁、重開都記得。
+// 沒有注音資料（zhuyin.json 讀不到）就沒有這顆按鈕
+function zhuyinToggle(ctx, section, raws) {
+  const { zhuyin, prefs } = ctx;
+  if (!zhuyin) return null;
+  let shown = false;
+  const b = button(null, 'btn small', () => {
+    prefs.setZhuyin(!shown);
+    show(prefs.getZhuyin());
+  }, 'toggle-zhuyin');
+  function show(on) {
+    b.textContent = on ? '注音：開' : '注音：關';
+    b.setAttribute('aria-pressed', String(on));
+    section.classList.toggle('zhuyin-on', on); // 開注音時字放大、行距拉開（css/style.css）
+    if (on !== shown) for (const r of raws) r.setReadings(on ? annotate(r.raw, zhuyin) : null);
+    shown = on;
+  }
+  // 開著注音時複製原文：注音欄是絕對定位的區塊，瀏覽器把選取的字轉成文字時，會在每個字後面多塞一個換行。
+  // 複製的那一刻先把注音藏起來（.zhuyin-copy）再取文字，貼出去的就和沒開注音時一樣。同步做完，畫面不會閃
+  section.addEventListener('copy', (e) => {
+    if (!shown || !e.clipboardData) return;
+    section.classList.add('zhuyin-copy');
+    const text = String(globalThis.getSelection?.() ?? '');
+    section.classList.remove('zhuyin-copy');
+    if (!text) return;
+    e.clipboardData.setData('text/plain', text);
+    e.preventDefault();
+  });
+  show(prefs.getZhuyin());
+  return b;
+}
+
 // 章次：「第四章」；〈諸惡章〉分四頁，寫成「第六章・四之二」
 function kickerOf(ch, chapters) {
   const pagesOfPart = partChapters(chapters, ch.part).length;
@@ -228,9 +263,10 @@ export function renderChapter(root, ctx, no) {
   const main = el('div', 'ch-main');
   const text = el('section', 'sutra');
   const plainNodes = [];
+  const raws = [];
   const blocks = ch.blocks.map((block) => (block.type === 'passage'
-    ? passageBlock(block, book.glossary, plainNodes)
-    : lampsBlock(block, ch, ctx)));
+    ? passageBlock(block, book.glossary, plainNodes, raws)
+    : lampsBlock(block, ch, ctx, raws)));
 
   const tools = el('div', 'sec-tools');
   let toggle = null;
@@ -244,7 +280,7 @@ export function renderChapter(root, ctx, no) {
     }, 'toggle-plain');
     toggle.setAttribute('aria-pressed', 'true');
   }
-  append(tools, speakButton(ch, ctx), toggle);
+  append(tools, speakButton(ch, ctx), zhuyinToggle(ctx, text, raws), toggle);
   append(text, append(el('div', 'sec-head'), el('h2', null, '經文'), tools), ...blocks);
   main.appendChild(text);
 

@@ -1,9 +1,10 @@
 // 組裝：依 hash 路由畫出對應的頁面，並管理頂列、翻頁鍵與滑動手勢。
 import { parseRoute, toHash } from './router.js';
 import { pages, nextRoute, prevRoute, chapterTitle } from './book.js';
-import { BOOK_TITLE, TOTAL_LAMPS, LAND_ART, SAVE_KEY, DAILY_KEY } from './config.js';
+import { BOOK_TITLE, TOTAL_LAMPS, LAND_ART, SAVE_KEY, DAILY_KEY, PREFS_KEY } from './config.js';
 import { el, button, append } from './ui/dom.js';
 import { hasOpenLayer } from './ui/layer.js';
+import { createPrefs } from './prefs.js';
 import { renderCover } from './ui/coverView.js';
 import { renderToc } from './ui/tocView.js';
 import { renderChapter } from './ui/chapterView.js';
@@ -39,7 +40,11 @@ function detectEmbedded(win) {
   try { return win.self !== win.top; } catch { return true; }
 }
 
-export function createApp({ root, book, store, daily, speech, win = globalThis.window, embedded = detectEmbedded(win) }) {
+// zhuyin 是注音資料（js/data/zhuyin.json），沒有就沒有「注音」開關；prefs 沒給就用不保存的
+export function createApp({
+  root, book, store, daily, speech, zhuyin = null, prefs = createPrefs(null),
+  win = globalThis.window, embedded = detectEmbedded(win),
+}) {
   const doc = root.ownerDocument;
   const order = pages(book.chapters);
   let current = null;
@@ -66,7 +71,7 @@ export function createApp({ root, book, store, daily, speech, win = globalThis.w
   }
 
   const ctx = {
-    book, store, daily, speech, go, refreshTopbar, embedded,
+    book, store, daily, speech, zhuyin, prefs, go, refreshTopbar, embedded,
     routeTitle: (route) => routeTitle(book, route),
     isPage: (route) => order.includes(route),
     next: (route) => nextRoute(book.chapters, route),
@@ -190,9 +195,10 @@ export function createApp({ root, book, store, daily, speech, win = globalThis.w
   // 同一本書開在另一個分頁、那邊改了進度：把手上的資料更新成最新的。
   // 不重畫整頁（會把正在讀的人捲回最上面），只更新頂列的燈數
   const onStorage = (e) => {
-    if (e.key != null && e.key !== SAVE_KEY && e.key !== DAILY_KEY) return; // key 為 null 是整個被清空
+    if (e.key != null && e.key !== SAVE_KEY && e.key !== DAILY_KEY && e.key !== PREFS_KEY) return; // key 為 null 是整個被清空
     store.refresh();
     daily.refresh();
+    prefs.refresh(); // 注音的開關：下次畫章節頁時照新的
     refreshTopbar();
   };
   win.addEventListener('storage', onStorage);
@@ -202,6 +208,7 @@ export function createApp({ root, book, store, daily, speech, win = globalThis.w
     if (doc.visibilityState === 'hidden') return;
     store.refresh();
     daily.refresh();
+    prefs.refresh();
     refreshTopbar();
     if (current === 'daily' && !hasOpenLayer()) render();
   };

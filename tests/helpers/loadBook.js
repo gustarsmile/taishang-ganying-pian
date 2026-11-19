@@ -12,6 +12,9 @@ export function loadBookFromDisk() {
   };
 }
 
+// 注音資料（選配，不在 loadBook 的四份資料裡）
+export const loadZhuyinFromDisk = () => read('zhuyin.json');
+
 // 給 loadBook(fetchJson) 用的假 fetch
 export const fetchJsonFromDisk = async (path) => JSON.parse(readFileSync(path, 'utf8'));
 

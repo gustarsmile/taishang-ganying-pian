@@ -11,6 +11,7 @@ export const GA_MEASUREMENT_ID = 'G-1Y2K10ZCPL';
 
 export const SAVE_KEY = 'ganyingBook.v1';
 export const DAILY_KEY = 'ganyingDaily.v1';
+export const PREFS_KEY = 'ganyingPrefs.v1'; // 閱讀偏好（顯示注音），和進度分開存
 
 // 傳統的十章（《太上感應篇直講》的分法）。全書 13 頁：〈諸惡章〉太長，分成四頁。
 export const PARTS = ['明義', '示警', '鑑察', '積善', '善報', '諸惡', '惡報', '指微', '悔過', '力行'];

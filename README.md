@@ -16,7 +16,7 @@
 
 進度只存在讀者自己的瀏覽器裡（`localStorage`，鍵 `ganyingBook.v1`、`ganyingDaily.v1`），沒有帳號。
 
-**Google Analytics 還沒裝。** `js/config.js` 的 `GA_MEASUREMENT_ID` 目前是空字串，`index.html` 沒有任何外部資源。這個系列的慣例是每一款作品自己一個 GA 帳戶；開好之後：把評估 ID 填進 `GA_MEASUREMENT_ID`，並把 GA 後台給的 Google 代碼貼進 `index.html` 的 `<head>`（寫法照 `ten-virtues-sutra` 的 `index.html`），`tests/html.test.js` 會檢查兩邊一致，「關於本書」也會自動多一句說明。翻頁時送 `page_view` 的程式已經在 `js/app.js` 裡（標題是章名，網址用路由當路徑，例如 `…/taishang-ganying-pian/ch/4`），有 Google 代碼就會生效。
+**Google Analytics：** 2026-11-19 裝上，評估 ID 是 `G-1Y2K10ZCPL`（GA 帳戶 OMILKYWAY.ORG 底下的資源 `taishang-ganying-pian`；這個系列各作品的資源都放在這個帳戶）。評估 ID 寫在 `js/config.js` 的 `GA_MEASUREMENT_ID`，Google 代碼在 `index.html` 的 `<head>`，兩邊要一起改，`tests/html.test.js` 會檢查一致；「關於本書」有 ID 才會多一句說明。翻頁時 `js/app.js` 會自己送 `page_view`（標題是章名，網址用路由當路徑，例如 `…/taishang-ganying-pian/ch/4`），GA 的「網頁和畫面」報表才看得出各章的閱讀量。
 
 ## 執行
 

@@ -4,9 +4,10 @@ export const BOOK_TITLE = '太上感應篇';
 // （tests/html.test.js 會守門）。
 export const BOOK_URL = 'https://gustarsmile.github.io/taishang-ganying-pian/';
 
-// Google Analytics 4 的評估 ID。還沒有開 GA 帳戶時留空字串：index.html 就不放 Google 代碼，
-// 「關於本書」也不會提到 GA。開好之後，這裡和 index.html 的 <head> 要一起改（tests/html.test.js 會檢查）。
-export const GA_MEASUREMENT_ID = '';
+// Google Analytics 4 的評估 ID（帳戶 OMILKYWAY.ORG、資源 taishang-ganying-pian，2026-11-19 建立）。
+// 這裡和 index.html 的 <head> 要一起改（tests/html.test.js 會檢查）；留空字串就代表沒裝，
+// 這時 index.html 不能放 Google 代碼，「關於本書」也不會提到 GA。
+export const GA_MEASUREMENT_ID = 'G-1Y2K10ZCPL';
 
 export const SAVE_KEY = 'ganyingBook.v1';
 export const DAILY_KEY = 'ganyingDaily.v1';

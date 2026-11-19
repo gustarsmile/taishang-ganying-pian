@@ -5,11 +5,11 @@
     { "id": "creatures", "good": "慈心於物", "goodPlain": "對萬物都有一分慈心", "evil": "射飛逐走", "evilPlain": "射殺飛鳥，追捕走獸" },
     { "id": "orphans", "good": "矜孤恤寡", "goodPlain": "憐惜孤兒，照顧寡婦", "evil": "凌孤逼寡", "evilPlain": "欺負孤兒，逼迫寡婦" },
     { "id": "merit", "good": "樂人之善", "goodPlain": "別人做好事，替他高興", "evil": "蔽人之善", "evilPlain": "別人的長處，設法遮蓋" },
-    { "id": "rescue", "good": "濟人之急", "goodPlain": "別人有急難，伸手幫忙", "evil": "危人自安", "evilPlain": "讓別人陷入危險，保全自己" },
+    { "id": "rescue", "good": "濟人之急", "goodPlain": "別人有急需，伸手幫忙", "evil": "危人自安", "evilPlain": "讓別人陷入危險，保全自己" },
     { "id": "faults", "good": "不彰人短", "goodPlain": "不張揚別人的短處", "evil": "形人之醜", "evilPlain": "到處說別人的醜事" },
     { "id": "boast", "good": "不炫己長", "goodPlain": "不炫耀自己的長處", "evil": "每好矜誇", "evilPlain": "總愛誇耀自己" },
     { "id": "share", "good": "推多取少", "goodPlain": "多的讓人，自己拿少的", "evil": "強取強求", "evilPlain": "硬拿、硬要" },
-    { "id": "grudge", "good": "受辱不怨", "goodPlain": "受了委屈不記恨", "evil": "念怨不休", "evilPlain": "把怨恨記在心裡不放" },
+    { "id": "grudge", "good": "受辱不怨", "goodPlain": "受了侮辱不記恨", "evil": "念怨不休", "evilPlain": "把怨恨記在心裡不放" },
     { "id": "giving", "good": "與人不追悔", "goodPlain": "給了人，不後悔", "evil": "施與後悔", "evilPlain": "給了以後又後悔" },
     { "id": "encourage", "good": "遏惡揚善", "goodPlain": "阻止壞事，讚揚好事", "evil": "助人為非", "evilPlain": "幫著別人做壞事" }
   ]

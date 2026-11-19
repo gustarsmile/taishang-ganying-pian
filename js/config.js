@@ -1,5 +1,4 @@
 export const BOOK_TITLE = '太上感應篇';
-export const BOOK_SUBTITLE = '互動電子書・轉禍為福';
 
 // 部署定址：GitHub Pages（帳號 gustarsmile）。改這個值之後，index.html 的 og:url／og:image 也要一起改
 // （tests/html.test.js 會守門）。
@@ -23,9 +22,6 @@ export const TOTAL_LAMPS = 112;
 export const LAND_ART = 'land-fortune.webp';
 export const LAND_ALT = '雨過天晴的山水人家：太上老君在花樹下向兩個孩子介紹眼前的景色，河上有石拱橋，兩岸是掛著紅燈籠的瓦屋、金黃稻田與果園，天邊有彩虹、祥雲和初升的太陽';
 export const COVER_ALT = '太上老君騎著青牛站在五彩祥雲上，兩個孩子提著燈籠在開滿桃花的山坡上仰望；天空一半是黎明的霞光，一半是還亮著北斗七星的夜空';
-
-// 每日三善：經文裡的兩個數字
-export const MILESTONES = [300, 1300];
 
 // 正文底本資訊（顯示在封面與「關於本書」）
 export const SOURCE = {

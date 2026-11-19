@@ -1,6 +1,6 @@
 // 用 draw 技能（gpt-image-2）依 art-prompts.mjs 生圖。
 // 用法：node scripts/gen-art.mjs            → 補齊 art-src/ 裡還沒有的圖
-//       node scripts/gen-art.mjs v03-fidelity c15-earth → 只重畫指定的圖
+//       node scripts/gen-art.mjs c04-good-deeds land-fortune → 只重畫指定的圖
 // 原圖留在 art-src/_raw/<name>_<時間>.png，最新的一張複製成 art-src/<name>.png。
 import { spawnSync } from 'node:child_process';
 import { existsSync, mkdirSync, readdirSync, copyFileSync } from 'node:fs';

@@ -43,10 +43,14 @@ export function createDaily(storage, now = () => new Date()) {
     const r = tryRead(store, DAILY_KEY);
     if (r.ok) ({ days, archived } = sanitize(r.value));
   }
-  // 只留最近 90 天的逐日紀錄；更早的那幾天不留明細，但它們的善要加進 archived，「累積」才不會變少
+  // 只留最近 90 天的逐日紀錄；更早的那幾天不留明細，但它們的善要加進 archived，「累積」才不會變少。
+  // 今天這一筆永遠留著：裝置的時鐘被調回去時，今天會比所有紀錄都「舊」，
+  // 如果照日期把它收掉，今天的勾就留不住，而且每點一次累積就多算一次。
   function save() {
-    const keys = Object.keys(days).sort();
-    const drop = keys.slice(0, Math.max(0, keys.length - KEEP_DAYS));
+    const todayKey = keyDaysAgo(0);
+    const keys = Object.keys(days).filter((k) => k !== todayKey).sort();
+    const keep = days[todayKey] ? KEEP_DAYS - 1 : KEEP_DAYS;
+    const drop = keys.slice(0, Math.max(0, keys.length - keep));
     for (const k of drop) { archived += count(days[k]); delete days[k]; }
     synced = writeJson(store, DAILY_KEY, { v: VERSION, days, archived }) || !store;
   }

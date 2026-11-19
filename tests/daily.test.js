@@ -133,6 +133,18 @@ describe('累積幾善 total()', () => {
     expect(d.total()).toBe(240);
     expect(createDaily(storage, now).total()).toBe(240); // 重建之後也一樣
   });
+  it('裝置的時鐘被調回去（今天比所有紀錄都早）：今天的勾留得住，累積也不會越點越多', () => {
+    const now = clock(2026, 1, 1);
+    const d = createDaily(memoryStorage(), now);
+    for (let i = 0; i < 90; i += 1) { d.set(0, true); now.addDays(1); } // 已經有滿 90 天的紀錄
+    expect(d.total()).toBe(90);
+    now.addDays(-200); // 時鐘調回比這 90 天都早的一天
+    d.set(1, true);
+    expect(d.today()).toEqual([false, true, false]); // 今天這一筆不能因為「最舊」就被收掉
+    expect(d.total()).toBe(91);
+    d.set(1, true); d.set(1, true); // 同一項再點幾次，也還是 91
+    expect(d.total()).toBe(91);
+  });
   it('存檔裡的 archived 會讀回來；不合理的值（負數、小數、字串）當成 0', () => {
     const now = clock(2026, 11, 18);
     const saved = (archived) => memoryStorage({ [DAILY_KEY]: JSON.stringify({ v: 1, days: { '2026-11-17': [true, true, false] }, archived }) });

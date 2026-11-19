@@ -3,6 +3,8 @@ import { createStore } from './state.js';
 import { createDaily } from './daily.js';
 import { createSpeech } from './speech.js';
 import { createApp } from './app.js';
+import { createPrefs } from './prefs.js';
+import { loadZhuyin } from './zhuyin.js';
 
 const root = document.getElementById('app');
 
@@ -29,8 +31,11 @@ function showError(err) {
 }
 
 // 不用 top-level await：舊一點的 iPhone（iOS 14）不支援
-loadBook()
-  .then((book) => {
-    createApp({ root, book, store: createStore(), daily: createDaily(), speech: createSpeech() }).render();
+// 注音資料和書一起載（讀不到也不礙事：loadZhuyin 會回 null，只是少了「注音」開關）
+Promise.all([loadBook(), loadZhuyin()])
+  .then(([book, zhuyin]) => {
+    createApp({
+      root, book, zhuyin, store: createStore(), daily: createDaily(), speech: createSpeech(), prefs: createPrefs(),
+    }).render();
   })
   .catch(showError);

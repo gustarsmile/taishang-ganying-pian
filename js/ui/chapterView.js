@@ -2,7 +2,7 @@ import { el, button, append, artFigure, cnNumber } from './dom.js';
 import { rawWithTerms } from './gloss.js';
 import { lampList, partChapters, chapterTitle, chapterRaw, splitSentences } from '../book.js';
 import { PARTS } from '../config.js';
-import { annotate } from '../zhuyin.js';
+import { annotateForDisplay } from '../zhuyin.js';
 
 // 「全篇十章」一覽：怎麼分組、每一章一句話
 const OVERVIEW_GROUPS = [
@@ -223,7 +223,7 @@ function zhuyinToggle(ctx, section, raws) {
     b.textContent = on ? '注音：開' : '注音：關';
     b.setAttribute('aria-pressed', String(on));
     section.classList.toggle('zhuyin-on', on); // 開注音時字放大、行距拉開（css/style.css）
-    if (on !== shown) for (const r of raws) r.setReadings(on ? annotate(r.raw, zhuyin) : null);
+    if (on !== shown) for (const r of raws) r.setReadings(on ? annotateForDisplay(r.raw, zhuyin) : null);
     shown = on;
   }
   // 開著注音時複製原文：注音欄是絕對定位的區塊，瀏覽器把選取的字轉成文字時，會在每個字後面多塞一個換行。

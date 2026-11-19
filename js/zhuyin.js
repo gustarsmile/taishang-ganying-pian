@@ -79,3 +79,28 @@ export function annotate(raw, zhuyin) {
   }
   return out;
 }
+
+// 「一」「不」的變調，照國小課本（和行天宮本）的標法：
+//   「不」在四聲前面讀二聲（不當 ㄅㄨˊ ㄉㄤˋ）；
+//   「一」在四聲前面讀二聲（一日 ㄧˊ ㄖˋ），在一、二、三聲前面讀四聲（一千 ㄧˋ ㄑㄧㄢ）；
+//   後面緊接著的不是字（標點、句尾）就讀本調。
+// 資料（zhuyin.json）和 annotate() 一律是本調，辭典查證也用本調；變調只在顯示的時候套用。
+// 看的是後一個字的本調，回傳新的陣列。
+const toneOf = (reading) => [...reading].find((c) => 'ˊˇˋ'.includes(c)) || (reading.startsWith('˙') ? '˙' : '');
+export function applySandhi(raw, readings) {
+  const chars = [...String(raw || '')];
+  return readings.map((reading, i) => {
+    const next = readings[i + 1];
+    if (!next) return reading;
+    const tone = toneOf(next);
+    if (chars[i] === '不' && reading === 'ㄅㄨˋ') return tone === 'ˋ' ? 'ㄅㄨˊ' : reading;
+    if (chars[i] === '一' && reading === 'ㄧ') {
+      if (tone === 'ˋ') return 'ㄧˊ';
+      return tone === '˙' ? reading : 'ㄧˋ';
+    }
+    return reading;
+  });
+}
+
+// 畫面上要顯示的讀音：本調加上「一」「不」的變調
+export const annotateForDisplay = (raw, zhuyin) => applySandhi(raw, annotate(raw, zhuyin));

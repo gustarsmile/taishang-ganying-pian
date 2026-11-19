@@ -8,7 +8,7 @@ import { createDaily } from '../js/daily.js';
 import { createSpeech } from '../js/speech.js';
 import { createPrefs } from '../js/prefs.js';
 import { chapterRaw, splitSentences } from '../js/book.js';
-import { annotate, isHan } from '../js/zhuyin.js';
+import { annotate, annotateForDisplay, isHan } from '../js/zhuyin.js';
 import { rawWithTerms } from '../js/ui/gloss.js';
 import { resetLayers } from '../js/ui/layer.js';
 import { PREFS_KEY, SAVE_KEY } from '../js/config.js';
@@ -131,7 +131,7 @@ describe('注音開關', () => {
       nodes.forEach((node, i) => {
         const raw = raws[i];
         expect(baseText(node), raw).toBe(raw);
-        const want = annotate(raw, zhuyin);
+        const want = annotateForDisplay(raw, zhuyin);
         const han = [...raw].map((c, k) => [c, want[k]]).filter(([c]) => isHan(c));
         const got = [...node.querySelectorAll('ruby')].map((r) => [baseText(r), r.querySelector('rt').textContent]);
         expect(got, raw).toEqual(han);
